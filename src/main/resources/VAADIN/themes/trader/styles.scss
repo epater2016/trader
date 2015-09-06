@@ -1,0 +1,7 @@
+// Import all the mixins for this theme
+@import "trader";
+
+.trader {
+  // Output the actual theme selectors
+  @include trader;
+}

@@ -1,0 +1,7 @@
+@import "../valo/valo";
+@import "common";
+
+@mixin trader {
+  @include valo;
+  @include trader-common;
+}

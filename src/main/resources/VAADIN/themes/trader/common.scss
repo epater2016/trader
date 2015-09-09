@@ -1,4 +1,20 @@
 @mixin trader-common {
 
-
+	.v-menubar-navigation-menu {
+	    color: #fff;
+	    background: #414B56;
+	    text-shadow: 1px 1px 0px #474746;
+	  }
+	  
+	.v-menubar-navigation-menu > .v-menubar-menuitem {
+	    background: #414B56;
+		
+	    .v-menubar-menuitem:hover {
+	      background-color: #4455aa;
+	    }
+	    
+	    .v-menubar-menuitem-selected {
+   		  background-color: #6475ca;
+  		}
+	}
 }

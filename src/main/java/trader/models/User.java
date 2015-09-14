@@ -1,9 +1,11 @@
 package trader.models;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -30,6 +34,7 @@ public class User {
     private Long version;
 
 	@NotNull
+	@Column(unique = true)
 	private String email;
 	
 	@NotNull
@@ -41,23 +46,32 @@ public class User {
 	@NotNull
 	private String password;
 	
+	@NotNull
+	private Boolean enabled;
+	
+	@NotNull
+	private Boolean locked;
+	
+	@Temporal(TemporalType.TIMESTAMP) 
+	private Date experation;
+	
+	@Temporal(TemporalType.TIMESTAMP) 
+	private Date passwordExperation;
+	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
 	@OnDelete(action=OnDeleteAction.CASCADE)
     private Set<UserRole> roles;
 
-	public static User createUser(String email, String firstName, String lastName, String password) {
-		User user = new User();
-		
-		user.email = email;
-		user.firstName = firstName;
-		user.lastName = lastName;
-		user.password = PasswordCrypto.getInstance().encrypt(password);
-		
-		if(user.roles == null) {
-            user.roles = new HashSet<UserRole>();
-        }
-
-        return user;
+	public User(String email, String firstName, String lastName, String password) {
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = PasswordCrypto.getInstance().encrypt(password);
+		this.enabled = true;
+		this.locked = false;
+		this.experation = null;
+		this.passwordExperation = null;
+		this.roles = new HashSet<UserRole>();
 	}
 	
 	public User() {
@@ -110,6 +124,38 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public Boolean getLocked() {
+		return locked;
+	}
+
+	public void setLocked(Boolean locked) {
+		this.locked = locked;
+	}
+
+	public Date getExperation() {
+		return experation;
+	}
+
+	public void setExperation(Date experation) {
+		this.experation = experation;
+	}
+
+	public Date getPasswordExperation() {
+		return passwordExperation;
+	}
+
+	public void setPasswordExperation(Date passwordExperation) {
+		this.passwordExperation = passwordExperation;
 	}
 
 	public Set<UserRole> getRoles() {

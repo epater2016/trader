@@ -1,5 +1,7 @@
 package trader;
 
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.vaadin.spring.security.VaadinSecurity;
@@ -17,11 +19,8 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
-
 import trader.views.AccessDeniedView;
 import trader.views.ErrorView;
-
 
 @SpringUI
 @Theme("trader")
@@ -42,6 +41,7 @@ public class TraderUI extends UI {
 	
 	@Override
 	protected void init(VaadinRequest request) {
+//		setLocale(Locale.US);
         // Let's register a custom error handler to make the 'access denied' messages a bit friendlier.
         setErrorHandler(new DefaultErrorHandler() {
             @Override
@@ -56,6 +56,7 @@ public class TraderUI extends UI {
 		VerticalLayout layout = new VerticalLayout();
 		Panel viewContent = new Panel();
 		MenuBar menu = new MenuBar();
+		menu.addStyleName("navigation-menu");
 		
 		layout.addComponents(menu, viewContent);
 		layout.setSizeFull();

@@ -1,13 +1,19 @@
+@include keyframes(animate-in-scale-up) {
+  0% {
+    @include transform(scale(0));
+  }
+}
+
 @mixin trader-common {
 
 	.v-menubar-navigation-menu {
 	    color: #fff;
-	    background: #414B56;
+	    background: $valo-menu-background-color;
 	    text-shadow: 1px 1px 0px #474746;
 	  }
 	  
 	.v-menubar-navigation-menu > .v-menubar-menuitem {
-	    background: #414B56;
+	    background: $valo-menu-background-color;
 		
 	    .v-menubar-menuitem:hover {
 	      background-color: #4455aa;

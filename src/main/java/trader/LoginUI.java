@@ -31,6 +31,9 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.Locale;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -62,6 +65,8 @@ public class LoginUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+    	
+//    	setLocale(Locale.US);
 
         FormLayout loginForm = new FormLayout();
         loginForm.setSizeUndefined();

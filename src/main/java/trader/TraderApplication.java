@@ -1,8 +1,7 @@
 package trader;
 
-import java.sql.Time;
-import java.util.Calendar;
-import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -28,25 +28,16 @@ import org.vaadin.spring.security.web.VaadinRedirectStrategy;
 import org.vaadin.spring.security.web.authentication.VaadinAuthenticationSuccessHandler;
 import org.vaadin.spring.security.web.authentication.VaadinUrlAuthenticationSuccessHandler;
 
-import com.google.gwt.i18n.client.TimeZone;
+import com.vaadin.spring.server.SpringVaadinServlet;
 
 import org.vaadin.spring.security.annotation.*;
 import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
 
-import trader.models.Role;
-import trader.models.Roles;
-import trader.models.User;
-import trader.models.UserRole;
 import trader.repositories.UserRepository;
-import trader.services.UserDetailsServiceImpl;
-import yahoofinance.Stock;
-import yahoofinance.YahooFinance;
-import yahoofinance.histquotes.HistoricalQuote;
-import yahoofinance.histquotes.Interval;
-import yahoofinance.quotes.fx.FxQuote;
-import yahoofinance.quotes.fx.FxSymbols;
 
 @SpringBootApplication(exclude = org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class)
+@EnableScheduling
+//@EnableVaadin
 public class TraderApplication {
 
     @Autowired
@@ -60,18 +51,25 @@ public class TraderApplication {
 	public CommandLineRunner initializeData() {
 		return args -> {
 //			repository.deleteAll();
-//			User adminUser = repository.save(User.createUser("hitam@live.com", "Haitam", "Haj Ali", "57571573"));
+//			User adminUser = repository.save(new User("hitam@live.com", "Haitam", "Haj Ali", "57571573"));
 //			adminUser.getRoles().add(new UserRole(Role.ROLE_ADMIN, adminUser));
-//			User user = repository.save(User.createUser("majdy@live.com", "Majdy", "Haj Ali", "mj@Aloha!"));
+//			User user = repository.save(new User("majdy@live.com", "Majdy", "Haj Ali", "mj@Aloha!"));
 //			user.getRoles().add(new UserRole(Role.ROLE_USER, user));
 //			repository.save(adminUser);
 //			repository.save(user);
-			
-			Stock usdeur = YahooFinance.get(FxSymbols.EURUSD);
-			System.out.println(usdeur);
 
 		};
 	}
+	
+//	@WebServlet(value = "/*", asyncSupported = true)
+//	public static class MySpringServlet extends SpringVaadinServlet {
+//
+//		@Override
+//		protected void servletInitialized() throws ServletException {
+//			super.servletInitialized();
+//			getService().addSessionInitListener(new TraderSessionInitListener());
+//		}
+//	}
 
     /**
      * Configure Spring Security.

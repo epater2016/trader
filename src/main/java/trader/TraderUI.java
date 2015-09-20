@@ -4,6 +4,12 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.vaadin.spring.i18n.MessageProvider;
+import org.vaadin.spring.i18n.ResourceBundleMessageProvider;
 import org.vaadin.spring.security.VaadinSecurity;
 import org.vaadin.spring.security.util.SecurityExceptionUtils;
 
@@ -11,9 +17,13 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.DefaultErrorHandler;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
+import com.vaadin.ui.JavaScript;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
@@ -21,6 +31,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import trader.views.AccessDeniedView;
 import trader.views.ErrorView;
+import trader.views.TradingAreaView;
 
 @SpringUI
 @Theme("trader")
@@ -41,7 +52,7 @@ public class TraderUI extends UI {
 	
 	@Override
 	protected void init(VaadinRequest request) {
-//		setLocale(Locale.US);
+		setLocale(Locale.ENGLISH);
         // Let's register a custom error handler to make the 'access denied' messages a bit friendlier.
         setErrorHandler(new DefaultErrorHandler() {
             @Override
@@ -53,6 +64,7 @@ public class TraderUI extends UI {
                 }
             }
         });
+        
 		VerticalLayout layout = new VerticalLayout();
 		Panel viewContent = new Panel();
 		MenuBar menu = new MenuBar();
@@ -63,7 +75,7 @@ public class TraderUI extends UI {
 		viewContent.setSizeFull();
 		layout.setExpandRatio(viewContent, 1);
 		
-		menu.addItem("Dashboard", e -> onDashboardClicked());
+		menu.addItem("Trading Area", e -> onDashboardClicked());
 		menu.addItem("Users", e -> onCustomersClicked());
 		
 		navigator = new Navigator(this, viewContent);
@@ -72,7 +84,7 @@ public class TraderUI extends UI {
         navigator.setErrorView(ErrorView.class);
         setContent(layout);
         //navigator.navigateTo(navigator.getState());
-        navigator.navigateTo("dashboard");
+        navigator.navigateTo(TradingAreaView.NAME);
 	}
 	
 	public ApplicationContext getApplicationContext() {
@@ -84,7 +96,20 @@ public class TraderUI extends UI {
 	}
 
 	private void onDashboardClicked() {
-		navigator.navigateTo("dashboard");
+		navigator.navigateTo(TradingAreaView.NAME);
+	}
+	
+	@Configuration
+	public static class MyModule {
+		
+		public MyModule() {
+			
+		}
+	    
+	    @Bean
+	    MessageProvider communicationMessages() {
+	        return new ResourceBundleMessageProvider("lang/messages"); // Will use UTF-8 by default
+	    }
 	}
 
 }

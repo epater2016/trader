@@ -16,6 +16,9 @@ import javax.validation.constraints.NotNull;
 @Table(name = "quotes")
 public class Quote {
 	
+	public static final String PROPERTY_CHART_ID = "chartSrc";
+	public static final String PROPERTY_NAME = "name";
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

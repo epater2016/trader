@@ -79,7 +79,11 @@
             <artifactId>vaadin-spring-addon-sidebar</artifactId>
             <version>${vaadin.spring.addons.version}</version>
         </dependency>
-          
+        <dependency>
+            <groupId>org.vaadin.spring.addons</groupId>
+            <artifactId>vaadin-spring-addon-i18n</artifactId>
+            <version>${vaadin.spring.addons.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-themes</artifactId>
@@ -187,7 +191,12 @@
     		<artifactId>YahooFinanceAPI</artifactId>
     		<version>2.0.0</version>
 		</dependency>
-		<!--  
+		<!-- 
+	  	<dependency>
+	    	<groupId>com.xignite.dev</groupId>
+	    	<artifactId>xignite_sdk</artifactId>
+	    	<version>1.0.1.0</version>
+	  	</dependency>  
 		<dependency>
    			<groupId>org.vaadin.addons</groupId>
    			<artifactId>headertags</artifactId>

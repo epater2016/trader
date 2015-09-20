@@ -1,17 +1,20 @@
 <!-- TradingView Widget BEGIN -->
+
+<script>
+var params={};window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(str,key,value){params[key] = value;});
+</script>
 <script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script>
 <script type="text/javascript">
 new TradingView.widget({
   "autosize": true,
-  "symbol": location.search.replace('?',''),
+  "symbol": params["symbol"],
   "interval": "1",
-  "timezone": "Etc/UTC",
+  "timezone": params["zone"],
   "theme": "Grey",
   "style": "2",
-  "locale": "en",
+  "locale": params["locale"],
   "toolbar_bg": "rgba(230, 145, 56, 1)",
   "save_image": false,
-  "details": true,
   "hideideas": true
 });
 </script>

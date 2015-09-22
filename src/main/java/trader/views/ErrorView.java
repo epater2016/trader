@@ -14,7 +14,11 @@ import com.vaadin.ui.themes.ValoTheme;
  */
 public class ErrorView extends VerticalLayout implements View {
 
-    private Label message;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5142351178212133166L;
+	private Label message;
 
     public ErrorView() {
         setMargin(true);

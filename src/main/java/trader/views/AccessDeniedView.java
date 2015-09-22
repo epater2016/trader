@@ -17,7 +17,11 @@ import com.vaadin.ui.themes.ValoTheme;
 @UIScope
 public class AccessDeniedView extends VerticalLayout implements View {
 
-    private Label message;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1991009566872435618L;
+	private Label message;
 
     public AccessDeniedView() {
         setMargin(true);

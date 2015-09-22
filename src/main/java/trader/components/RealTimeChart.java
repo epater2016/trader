@@ -6,6 +6,10 @@ import com.vaadin.ui.BrowserFrame;
 
 public class RealTimeChart extends AbsoluteLayout {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3154463732483823099L;
 	private String symbol = "FX:EURUSD";
 	private String timeZone = "Etc/UTC";
 	private String locale = "en";

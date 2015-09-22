@@ -21,6 +21,11 @@ import trader.services.TraderUserService;
 @UIScope
 public class UsersView extends VerticalLayout implements View {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2671806438249999662L;
+
 	private Grid grid;
 	
 	@Autowired

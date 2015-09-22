@@ -44,12 +44,17 @@ import org.vaadin.spring.security.VaadinSecurity;
  *
  * @author Petter Holmström (petter@vaadin.com)
  */
-@SpringUI(path = "/login")
-@Theme(ValoTheme.THEME_NAME)
+@SpringUI(path = "login")
+@Theme("trader")
 @Title("Login")
 public class LoginUI extends UI {
 
-    @Autowired
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7664868871138936094L;
+
+	@Autowired
     VaadinSecurity vaadinSecurity;
 
     private TextField userName;
@@ -66,7 +71,7 @@ public class LoginUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
     	
-//    	setLocale(Locale.US);
+    	setLocale(Locale.ENGLISH);
 
         FormLayout loginForm = new FormLayout();
         loginForm.setSizeUndefined();
@@ -79,7 +84,12 @@ public class LoginUI extends UI {
         login.setDisableOnClick(true);
         login.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         login.addClickListener(new Button.ClickListener() {
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 7813011112417170727L;
+
+			@Override
             public void buttonClick(Button.ClickEvent event) {
                 login();
             }

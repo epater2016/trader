@@ -3,27 +3,19 @@ package trader.views;
 import java.util.Iterator;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.i18n.I18N;
 
-import com.vaadin.annotations.Theme;
-import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.combobox.FilteringMode;
-import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.BrowserFrame;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -33,23 +25,24 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+//import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 import trader.components.RealTimeChart;
 import trader.components.RealTimeTicker;
 import trader.models.Quote;
-import trader.models.QuoteCategory;
-import trader.services.TraderUserService;
 import trader.services.TradingService;
 
 @SpringView(name = TradingAreaView.NAME)
 public class TradingAreaView extends Panel implements View {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7174365612115919173L;
+
 	public static final String NAME = "tradingArea";
 	
     public static final String TITLE_ID = "trading-area-title";
@@ -67,7 +60,7 @@ public class TradingAreaView extends Panel implements View {
     private Label titleLabel;
     private CssLayout tradingAreaPanels;
     private VerticalLayout root;
-    private Window notificationsWindow;
+//    private Window notificationsWindow;
 
 	private ComboBox quoteSelector;
 
@@ -194,10 +187,10 @@ public class TradingAreaView extends Panel implements View {
 		return quoteSelector;
 	}
 
-	private Component buildBanner() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	private Component buildBanner() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	private Component buildContent() {
 		tradingAreaPanels = new CssLayout();
@@ -243,7 +236,12 @@ public class TradingAreaView extends Panel implements View {
         tools.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         MenuItem max = tools.addItem("", FontAwesome.EXPAND, new Command() {
 
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -3443829142738989399L;
+
+			@Override
             public void menuSelected(final MenuItem selectedItem) {
                 if (!slot.getStyleName().contains("max")) {
                     selectedItem.setIcon(FontAwesome.COMPRESS);

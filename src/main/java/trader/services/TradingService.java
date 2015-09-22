@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import trader.models.Quote;
-import trader.repositories.MarketRepository;
+//import trader.repositories.MarketRepository;
 import trader.repositories.QuoteRepository;
 
 @Service
 public class TradingService {
-    @Autowired
-    private MarketRepository markets;
+//    @Autowired
+//    private MarketRepository markets;
     
     @Autowired
     private QuoteRepository quotes;

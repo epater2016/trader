@@ -1,20 +1,11 @@
 package trader;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,27 +20,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.vaadin.spring.events.annotation.EnableEventBus;
 import org.vaadin.spring.http.HttpService;
-import org.vaadin.spring.i18n.MessageProvider;
-import org.vaadin.spring.i18n.ResourceBundleMessageProvider;
 import org.vaadin.spring.i18n.annotation.EnableI18N;
 import org.vaadin.spring.security.web.VaadinRedirectStrategy;
 import org.vaadin.spring.security.web.authentication.VaadinAuthenticationSuccessHandler;
 import org.vaadin.spring.security.web.authentication.VaadinUrlAuthenticationSuccessHandler;
 
-import com.vaadin.spring.server.SpringVaadinServlet;
-
 import org.vaadin.spring.security.annotation.*;
 import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
 
-import trader.models.Market;
-import trader.models.Quote;
-import trader.models.QuoteCategory;
-import trader.repositories.MarketRepository;
-import trader.repositories.QuoteRepository;
-import trader.repositories.UserRepository;
+//import trader.repositories.MarketRepository;
+//import trader.repositories.QuoteRepository;
+//import trader.repositories.UserRepository;
 
 @SpringBootApplication(exclude = org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class)
 @EnableI18N
@@ -57,14 +40,14 @@ import trader.repositories.UserRepository;
 @EnableEventBus
 public class TraderApplication {
 
-    @Autowired
-    private UserRepository users;
-    
-    @Autowired
-    private MarketRepository markets;
-    
-    @Autowired
-    private QuoteRepository quotes;
+//    @Autowired
+//    private UserRepository users;
+//    
+//    @Autowired
+//    private MarketRepository markets;
+//    
+//    @Autowired
+//    private QuoteRepository quotes;
 	
 	public static void main(String[] args) {
         SpringApplication.run(TraderApplication.class, args);
@@ -102,16 +85,6 @@ public class TraderApplication {
 //			quotes.save(new Quote("GOOG", "Google Inc", QuoteCategory.STOCKS, nyse, "NASDAQ:GOOG", "GOOG", 80));
 		};
 	}
-	
-//	@WebServlet(value = "/*", asyncSupported = true)
-//	public static class MySpringServlet extends SpringVaadinServlet {
-//
-//		@Override
-//		protected void servletInitialized() throws ServletException {
-//			super.servletInitialized();
-//			getService().addSessionInitListener(new TraderSessionInitListener());
-//		}
-//	}
 
     /**
      * Configure Spring Security.
@@ -141,20 +114,21 @@ public class TraderApplication {
         protected void configure(HttpSecurity http) throws Exception {
             http.csrf().disable(); // Use Vaadin's built-in CSRF protection instead
             http.authorizeRequests()
-            		.antMatchers("/").anonymous()        
-            		.antMatchers("/login/**").anonymous()
-                    .antMatchers("/vaadinServlet/UIDL/**").permitAll()
-                    .antMatchers("/vaadinServlet/HEARTBEAT/**").permitAll()
-                    .antMatchers("/").permitAll()
+            		.antMatchers("/ui/").anonymous()
+            		.antMatchers("/ui/login/**").anonymous()
+                    .antMatchers("/ui/UIDL/**").permitAll()
+                    .antMatchers("/ui/HEARTBEAT/**").permitAll()
+                    .antMatchers("/ui/").permitAll()
+                    .antMatchers("/ui").denyAll()
                     .anyRequest().authenticated();
             http.httpBasic().disable();
             http.formLogin().disable();
             http.logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login?logout")
+                    .logoutUrl("/ui/logout")
+                    .logoutSuccessUrl("/ui/login?logout")
                     .permitAll();
             http.exceptionHandling()
-                    .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
+                    .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/ui/login"));
             http.rememberMe().rememberMeServices(rememberMeServices()).key("myAppKey");
         }
 
@@ -162,6 +136,8 @@ public class TraderApplication {
         public void configure(WebSecurity web) throws Exception {
             web.ignoring().antMatchers("/VAADIN/**");
         }
+        
+        
 
         @Override
         @Bean
@@ -179,7 +155,7 @@ public class TraderApplication {
 
         @Bean(name = VaadinSharedSecurityConfiguration.VAADIN_AUTHENTICATION_SUCCESS_HANDLER_BEAN)
         VaadinAuthenticationSuccessHandler vaadinAuthenticationSuccessHandler(HttpService httpService, VaadinRedirectStrategy vaadinRedirectStrategy) {
-            return new VaadinUrlAuthenticationSuccessHandler(httpService, vaadinRedirectStrategy, "/"); 
+            return new VaadinUrlAuthenticationSuccessHandler(httpService, vaadinRedirectStrategy, "/ui/"); 
         }
         
         @Bean

@@ -1,5 +1,9 @@
 package trader;
 
+//import java.util.Calendar;
+//import java.util.Date;
+//import java.util.TimeZone;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +31,12 @@ import org.vaadin.spring.security.web.VaadinRedirectStrategy;
 import org.vaadin.spring.security.web.authentication.VaadinAuthenticationSuccessHandler;
 import org.vaadin.spring.security.web.authentication.VaadinUrlAuthenticationSuccessHandler;
 
+//import trader.models.Market;
+//import trader.models.Quote;
+//import trader.models.QuoteCategory;
+//import trader.repositories.MarketRepository;
+//import trader.repositories.QuoteRepository;
+
 import org.vaadin.spring.security.annotation.*;
 import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
 
@@ -45,7 +55,7 @@ public class TraderApplication {
 //    
 //    @Autowired
 //    private MarketRepository markets;
-//    
+    
 //    @Autowired
 //    private QuoteRepository quotes;
 	
@@ -81,8 +91,8 @@ public class TraderApplication {
 //			Market nyse = new Market("NYSE", Calendar.MONDAY, Calendar.FRIDAY, openHour, closeHour);
 //			markets.save(forex);
 //			markets.save(nyse);
-//			quotes.save(new Quote("EURUSD", "EUR/USD", QuoteCategory.CURRENCIES, forex, "FX:EURUSD", "EURUSD=x", 80));
-//			quotes.save(new Quote("GOOG", "Google Inc", QuoteCategory.STOCKS, nyse, "NASDAQ:GOOG", "GOOG", 80));
+//			quotes.save(new Quote("EURUSD", "EUR/USD", QuoteCategory.CURRENCIES, forex, "1:EURUSD", "1:EURUSD", "EURUSD=x", 80));
+//			quotes.save(new Quote("GOOG", "Google Inc", QuoteCategory.STOCKS, nyse, "4:#S-GOOG", "#S-GOOG" , "GOOG", 80));
 		};
 	}
 

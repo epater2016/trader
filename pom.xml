@@ -22,7 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<vaadin.version>7.5.4</vaadin.version>
-        <vaadin-spring.version>1.0.0.beta3</vaadin-spring.version>
+        <vaadin-spring.version>1.0.0</vaadin-spring.version>
         <vaadin.spring.extensions.version>0.0.7-SNAPSHOT</vaadin.spring.extensions.version>
         <vaadin.spring.addons.version>0.0.7-SNAPSHOT</vaadin.spring.addons.version>
         <slf4j.version>1.7.10</slf4j.version>
@@ -114,8 +114,13 @@
             <artifactId>vaadin-client-compiled</artifactId>
             <version>${vaadin.version}</version>
         </dependency>
-        
         <!-- 
+        <dependency>
+   			<groupId>com.vaadin.addon</groupId>
+   			<artifactId>vaadin-charts</artifactId>
+   			<version>3.0.0-alpha6</version>
+		</dependency>
+        
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-push</artifactId>
@@ -228,6 +233,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
+            </plugin>
 		</plugins>
 	</build>
 	

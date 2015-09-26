@@ -1,0 +1,552 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 2, 2013, 2:57:40 AM
+    Author     : And
+*/
+
+#canvas {
+    padding: 0;
+    margin: 0;
+    /*cursor: crosshair;*/
+}
+
+#container {
+    /*box-shadow: 5px 5px 5px #888888;*/
+    overflow: hidden;
+    position: relative;
+    /*width: 728px; width is set inline to 100% */
+    border: 1px solid #cbcbcb;
+    margin-top: 10px;
+}
+
+
+div.filter ul {
+    padding: 0;
+    margin: 0;
+    /*visibility: hidden;*/
+    text-align: right;
+    margin-top:3px;
+
+}
+
+.filter ul li {
+    list-style: none;
+    display: inline-block;
+    padding: 2px 5px;
+    /*cursor: pointer;*/
+    border-left: 1px solid #cbcbcb;
+
+}
+
+.filter ul li:last-child {
+    padding-right: 0;
+}
+
+.filter ul li:first-child {
+    border-left: none;
+}
+
+.filtered {
+    color: #126320;
+    margin-left: 5px;
+    clear: both;
+    display: none;
+}
+
+#container .filter img {
+    /*padding: 5px 5px;*/
+    cursor: pointer;
+}
+
+.filter img {
+    /*padding: 5px 5px;*/
+    cursor: pointer;
+}
+#container .ui-slider-handle {
+    background-image: url("http://code.jquery.com/ui/1.9.2/themes/base/images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #E6E6E6;
+    background-size: 100% 100%;
+    cursor: pointer;
+    height: 32px;
+    position: absolute;
+    width: 34px;
+    border: 1px solid #D3D3D3;
+    color: #555555;
+    font-weight: normal;
+    cursor: default;
+    height: 1.2em;
+    position: absolute;
+    width: 1.2em;
+    z-index: 2;
+}
+
+.slider {
+    /*    height: 32px;*/
+    position: relative;
+    /*width: 696px;*/
+    /*margin: 0 auto;*/
+}
+
+.zoom {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAMCAMAAACdvocfAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRFzMzM////040VdgAAAAJ0Uk5T/wDltzBKAAAAEklEQVR42mJgYAQCBopJgAADAAbwADHy2qHzAAAAAElFTkSuQmCC");
+    background-position: center bottom;
+    background-repeat: repeat-x;
+    background-size: 5px 40px;
+    height: 18px;
+    padding-top: 5px;
+    margin-left: 5px;
+    width: 640px;    
+}
+
+.control {
+    /*overflow: hidden;*/
+
+}
+
+/*.now {
+    display: block;
+}*/
+
+.filter {
+    position: relative;
+}
+
+.loading {
+    height: 32px;
+    /*left: 350px; these depend on container width/height
+    top: 175px;*/
+    position: absolute;
+    width: 32px;
+    display:inline-block;
+    background-origin: 0 0;
+    background-image: url("/images/front/charts/loading-blue.gif");
+    background-size: 32px 32px;
+}
+
+/*addons*/
+#addons {
+    margin-top: 10px;
+}
+
+#addons img {
+    margin-left: 5px;
+}
+
+#crosshair {
+    cursor: pointer;
+    border-radius: 13px;
+}
+.crosshair_active {
+    background-color: #0087CD;
+}
+
+.canvas_crosshair {
+    cursor: crosshair;
+}
+
+/*end addons*/
+
+#timezone {
+    display: block;
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+/*notification*/
+
+.notification {
+    color: red;
+    padding: 5px;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/*datepicker*/
+.datepicker {
+    background: url("/images/calendar_icon.gif") no-repeat scroll right center #FFFFFF;
+    border: 1px solid #CCCCCC;
+    cursor: pointer;
+    float: right;
+    font-size: 12px;
+    height: 20px;
+    width: 100px;
+}
+
+.left_right {
+    bottom: 0;
+    cursor: pointer;
+    float: left;
+    position: absolute;
+    right: 3px;
+}
+
+.start_end {
+    float: right;
+    margin-top: 3px;
+}
+
+.start_end label {
+    float: right;
+    height: 20px;
+    margin-right: 10px;
+    overflow: hidden;
+}
+
+.start_end span {
+    display: block;
+    float: left;
+    margin-top: 4px;   
+    cursor: pointer; 
+}
+
+.start_end input {
+
+}
+
+.button_orange img {
+    /*background-image: url("/images/front/charts/button_arrow.png");*/
+    position: absolute;
+/*    top: 4px;
+    right: 5px;*/
+}
+
+.charts_orange span {
+    /*margin: 20px 0 !important;*/
+    overflow: hidden;
+    /*padding-right: 30px !important;*/
+    position: relative;
+    float: right;
+}
+
+
+.leaders {
+    clear: both;
+    /*overflow: hidden;*/
+}
+
+.chart_desc_top {
+    clear: both;
+    overflow: hidden;
+}
+
+.chart_desc_top table {
+    float: left;
+    /*width: 740px !important;*/
+    border: #cccccc solid 1px;
+    /*border-left: none;*/
+    /*border-right: none;*/
+}
+
+.chart_desc_top table td {
+    vertical-align: top;
+    padding: 3px !important;
+    border-left: #cccccc solid 1px;
+    /*text-align: center !important;*/
+}
+.chart_desc_top table td:first-child {
+    border-left: none;
+}
+
+.charts_orange {
+    float: right;
+    margin-top: 15px;
+    outline: none;
+}
+
+.chart_desc_top .value {
+    font-size: 18px;
+}
+
+.chart_desc_top .title {
+    color: #373737
+}
+
+.to_up {
+    color: #126320;
+}
+
+.to_down {
+    color: #d31a02;
+}
+
+.calculate.to_up {
+    background-image: url("/images/front/charts/to_up.png");
+    background-position: 0 5px;
+    background-repeat: no-repeat;
+    background-size: 8px 11px;
+}
+
+.calculate.to_down {
+    background-image: url("/images/front/charts/to_down.png");
+    background-position: 0 5px;
+    background-repeat: no-repeat;
+    background-size: 8px 11px;
+}
+
+.value {
+    padding-right: 3px !important;
+}
+
+.value {
+    padding-left: 3px !important;
+}
+.calculate {
+    font-size: 12px;
+    padding-bottom: 3px;
+    padding-left: 10px;
+    padding-top: 3px;
+}
+
+
+.company {
+    font-size: 10px;
+    color: #040404;
+}
+
+.group_desc img{
+    float: left;
+    margin-right: 10px;
+}
+.group_desc p{
+    font-size: 12px;
+    color: #040404;    
+}
+
+.group_desc p span.gr{    
+    color: #126320;
+    font-weight: 700;
+}
+
+
+.notification_socket {
+    color: red;
+}
+
+.no_data_available p{
+    color: #646465;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.commodities_desc {
+
+}
+
+.commodities_desc img {
+    /*width: 60px;*/
+    /*height: 30px;*/
+    width: 42px;
+    height: 42px;
+} 
+
+.indices_desc {
+    color: #040404;
+    font-size: 10px;
+    height: 40px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    width: 135px;
+}
+
+/*.indices_desc p {
+    font-size: 10px;
+    color: #040404;
+}*/
+
+.active_step  {
+    cursor: default;
+    color: #005580 !important;
+}
+.active_step:hover {
+    color: #005580 !important;
+    text-decoration: underline;
+
+}
+
+.filter ul li a:hover {
+    color: #005580;
+    text-decoration: underline;
+}
+.filter ul li a {
+    text-decoration: underline;
+}
+.category_items, .category_group {
+    /* min-height: 25px;*/
+    min-width: 150px;
+    /*text-align: center;*/
+    cursor: pointer;
+}
+.category_items option, .category_group option {
+    cursor: pointer;
+}
+
+.category_items {
+    margin-left: 20px;
+}
+
+.group_desc {
+    float: right;
+    width: 655px;
+} 
+
+h2.top_desc {
+    color: #000000 !important;   
+    font-size: 15px;
+    font-weight: 700;          
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+h3.chartsh3 {
+    color: #000000 !important;   
+    font-size: 13px;
+    font-weight: 700;          
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: none !important;    
+    padding-left: 0px !important;
+}
+
+.bt_desc span {
+    color: #126320;
+}
+.bt_desc {
+    color: #131313;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.prev {background-image: url("/images/front/charts/prev.png");}
+.now {background-image: url("/images/front/charts/now.png");}
+.next {background-image: url("/images/front/charts/next.png");}
+.prev, .now, .next {display:inline-block;width:23px;height:18px;background-origin: 0 0; background-size: 23px 18px;}
+.filter a {  color: #0087CD;/* 1 MIN 5 MINS */
+             font-weight: bold;
+             text-indent: 0;}
+
+.Wfll {min-width: 310px;}
+#ifc_widgetcharts {width:100%;}
+.filter_category_group_wg {display: inline-block;}
+.filter_category_item_wg {display: inline-block;}
+.Wcontent {overflow:hidden; width:745px;padding-left: 5px;}
+.line.chartsw {width:90%; height:1px;margin-bottom:10px;}
+.gray.chartsw {border-top: 1px solid #CCCCCC;}
+#ifc_nedcharts {border: 1px solid #CCCCCC; width:100%;margin-bottom:5px;text-align: right; }
+#ifc_nedcharts a {margin-right:5px;}
+
+#canvas p {
+    font-size: 25px;
+    color: red;
+}
+
+.button_with_plus_a {color:black!important;float:right;margin:10px 0;vertical-align: middle; height: 28px;}
+.button_with_plus {height:25px;background-color: #126320;border:1px solid #126320;padding: 0 0 0 0 !important;display:inline-block;overflow:hidden;color: #fff;}
+.button_with_plus span.orange {display:inline-block;width:26px;height:26px;background-image: url("/images/front/charts/orange_plus_1.png");}
+.button_with_plus span.regular {float:right;line-height:25px; padding: 0 4px 0 3px;font-weight: normal;}
+.button_with_plus:hover {
+   background-color: #373737;
+   border:1px solid #373737;
+}
+
+.button_with_plus:hover span.orange   {
+    background-image: url("/images/front/charts/orange_plus_hover_1.png");
+} 
+
+
+.filter .control {display:inline-block;}
+div.filter ul {display:inline-block;}
+
+.filter_category, .filter_category_wg {text-align:right;width:100%;display:inline-block;background-color:#e1e1e1;padding:5px 0;margin-bottom:3px;}
+.filter_category select, .filter_category_wg select {border-radius: 0;background-color: whitesmoke;}
+.filter_category_item_wg {margin-left:10px;margin-right:5px;}
+.category_items {margin-right:5px;}
+
+#container {direction:ltr;}
+#container * {direction:ltr;}
+input#datepicker {text-align: left;}
+
+.top_btn
+{
+    margin: 20px 0px 0px 15px !important;
+}
+
+.top_btn li
+{
+    display: inline-block;
+    width: 33%;    
+}
+.top_btn li span
+{
+
+    width: 85%;    
+}
+ul.top_btn a span.button_green
+{
+    text-align: center;
+    font-size: 11px !important;
+}
+.chart_desc
+{
+     overflow: hidden;
+}
+.chart_desc img
+{    
+    margin-right: 0px;
+    margin-top: 10px;
+}
+.instrumentside
+{
+    overflow: hidden;
+}
+.chart_desc img.foreximage
+{
+    margin-left: -57px;
+}
+.amChartsPanel a {
+    display: none !important; /*remove annoying amchart link, which blocks buttons*/
+}
+
+.lichart {
+    top: -50%;
+    left: 50%;
+    margin-left: -16px;
+    margin-top: -16px;
+    position: relative;
+}
+
+.amChartsPeriodSelector {
+    display: none;
+}
+#chart_history_horizon {
+    width: 100px;
+    border-radius: 0;
+}
+.filter2 {
+	background: url("/images/calendar_icon.gif")
+    margin: 4px 0;
+}
+.chart_drawtype {
+    margin: 0 4px;
+    cursor: pointer;
+}
+.ifc_chartdiv_wrapper {
+    margin-bottom: 80px;
+}
+.ifc_chartdiv_wrapper .ui-datepicker-trigger {
+    margin-left: -20px;
+}
+#chart_history_update_stop {
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+}

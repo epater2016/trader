@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script type="text/javascript" src="https://www.ifcmarkets.asia/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="https://www.ifcmarkets.asia/js/jquery-ui/development-bundle/ui/minified/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.ifcmarkets.asia/js/front/functions.js"></script>
+<script src="https://www.ifcmarkets.asia/js/socket.io-1.1.0.js" type="text/javascript"></script>
+<script src="https://www.ifcmarkets.asia/js/amcharts/amcharts.js" type="text/javascript"></script>
+<script src="https://www.ifcmarkets.asia/js/amcharts/serial.js" type="text/javascript"></script>
+<script src="https://www.ifcmarkets.asia/js/amcharts/amstock.js" type="text/javascript"></script>
+<link rel="stylesheet" href="live_chart_window.css" type="text/css">
+<link rel="stylesheet" href="live_chart_style.css" type="text/css">
+<link rel="stylesheet" href="https://www.ifcmarkets.asia/js/jquery-ui/css/smoothness/jquery-ui-1.10.1.custom.min.css" type="text/css">
+<script type="text/javascript">
+var lang_cw = "en";var hname_cw = "www.ifcmarkets.asia";var uri=location.search.replace('?','');var selected_instr_array=decodeURIComponent(uri);
+var vi=document.createElement("script");vi.type = "text/javascript";vi.async=true;vi.src = "https://www.ifcmarkets.asia/js/chartsWidgetAM.js";
+var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(vi,s);
+</script>
+
+<style>
+	document, html, body {
+		height: 100%;
+		margin: 0px;
+		padding: 0px;
+		border: none;
+		display: block;
+}
+	#ifc_widgetcharts {
+		height: 100%;
+		border: none;	
+}
+	#ifc_nedcharts {
+		display: none;
+}
+	div.filter_category_wg,  div.filter, div.filter2 {
+		display: none;
+}
+</style>
+</head>
+<body>
+<div style = "overflow: hidden; border: none; display: block; margin-top: -19px; height: calc(100% + 19px);">
+	<div id="ifc_widgetcharts" class="ifc_widgetcharts"></div>
+	<div id="ifc_nedcharts" class="ifc_nedcharts">Provided by <a href="http://www.ifcmarkets.com/en/partnership/informers" target="blank" rel="nofollow">IFC Markets</a></div>
+</div>
+</body>
+</html>

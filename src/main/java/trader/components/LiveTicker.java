@@ -1,5 +1,8 @@
 package trader.components;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 //import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.AbsoluteLayout;
@@ -7,22 +10,22 @@ import com.vaadin.ui.BrowserFrame;
 //import com.vaadin.ui.Button;
 //import com.vaadin.ui.themes.ValoTheme;
 
-public class RealTimeTicker extends AbsoluteLayout {
+public class LiveTicker extends AbsoluteLayout {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2902220055714080981L;
 
-	private String symbol = "FX:EURUSD";
+	private String symbol = "EURUSD";
 	
 	private BrowserFrame browser = new BrowserFrame("Real Time Ticker");
 	
-	public RealTimeTicker() {
+	public LiveTicker() {
 		updateTicker();
 		setupLayout();
 	}
 	
-	public RealTimeTicker(String symbol) {
+	public LiveTicker(String symbol) {
 		super();
 		this.symbol = symbol;
 		updateTicker();
@@ -46,7 +49,13 @@ public class RealTimeTicker extends AbsoluteLayout {
 	}
 
 	private void updateTicker() {
-		browser.setSource(new ThemeResource("HTML/tickerWrapper.html?"+symbol));
+//		browser.setSource(new ThemeResource("HTML/tickerWrapper.html?"+symbol));
+		try {
+			browser.setSource(new ThemeResource("HTML/live-ticker.html?" + URLEncoder.encode(symbol, "UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public String getSymbol() {

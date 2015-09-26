@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "quotes")
 public class Quote {
 	
-	public static final String PROPERTY_CHART_ID = "chartSrc";
+	public static final String PROPERTY_SYMBOL_ID = "symbol";
 	public static final String PROPERTY_NAME = "name";
 	
 	@Id
@@ -44,6 +44,9 @@ public class Quote {
 	private String chartSrc;
 	
 	@NotNull
+	private String tickerSrc;
+	
+	@NotNull
 	private String quoteSrc;
 	
 	@NotNull
@@ -52,7 +55,7 @@ public class Quote {
 	@NotNull
 	private Boolean enabled;
 
-	public Quote(String symbol, String name, QuoteCategory category, Market market, String chartSrc, String quoteSrc,
+	public Quote(String symbol, String name, QuoteCategory category, Market market, String chartSrc, String tickerSrc, String quoteSrc,
 			Integer payout) {
 		super();
 		this.symbol = symbol;
@@ -60,6 +63,7 @@ public class Quote {
 		this.category = category;
 		this.market = market;
 		this.chartSrc = chartSrc;
+		this.tickerSrc = tickerSrc;
 		this.quoteSrc = quoteSrc;
 		this.payout = payout;
 		this.enabled = true;
@@ -123,6 +127,14 @@ public class Quote {
 
 	public void setChartSrc(String chartSrc) {
 		this.chartSrc = chartSrc;
+	}
+	
+	public String getTickerSrc() {
+		return tickerSrc;
+	}
+
+	public void setTickerSrc(String tickerSrc) {
+		this.tickerSrc = tickerSrc;
 	}
 
 	public String getQuoteSrc() {

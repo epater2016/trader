@@ -21,6 +21,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
@@ -30,8 +31,8 @@ import com.vaadin.ui.VerticalLayout;
 //import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
-import trader.components.RealTimeChart;
-import trader.components.RealTimeTicker;
+import trader.components.LiveChart;
+import trader.components.LiveTicker;
 import trader.models.Quote;
 import trader.services.TradingService;
 
@@ -64,9 +65,11 @@ public class TradingAreaView extends Panel implements View {
 
 	private ComboBox quoteSelector;
 
-	private RealTimeChart chart;
+	private LiveChart chart;
 
-	private RealTimeTicker ticker;
+	private LiveTicker ticker;
+
+	private BeanContainer<String, Quote> quotes;
 	
 	@PostConstruct
 	protected void initialize() {
@@ -75,7 +78,7 @@ public class TradingAreaView extends Panel implements View {
         addStyleName(ValoTheme.PANEL_BORDERLESS);
         setSizeFull();
         eventBus.subscribe(this);
-
+        
         root = new VerticalLayout();
         root.setSizeFull();
         root.setMargin(true);
@@ -180,8 +183,8 @@ public class TradingAreaView extends Panel implements View {
 		quoteSelector.setNullSelectionAllowed(false);
 		
 		quoteSelector.addValueChangeListener(e -> {
-                chart.setChartSymbol(String.valueOf(e.getProperty().getValue()));
-                ticker.setSymbol(String.valueOf(e.getProperty().getValue()));
+                chart.setChartSymbol(quotes.getItem(e.getProperty().getValue()).getBean().getChartSrc());
+                ticker.setSymbol(quotes.getItem(e.getProperty().getValue()).getBean().getTickerSrc());
 		});
 		
 		return quoteSelector;
@@ -204,13 +207,15 @@ public class TradingAreaView extends Panel implements View {
 	}
 
 	private Component buildTicker() {
-		ticker = new RealTimeTicker();
+		ticker = new LiveTicker();
 		return createContentWrapper(ticker);
 	}
 
 	private Component buildChart() {
-		chart = new RealTimeChart();
+		chart = new LiveChart();
 		return createContentWrapper(chart);
+//		SplineUpdatingEachSecond splineUpdatingEachSecond = new SplineUpdatingEachSecond();
+//		return createContentWrapper(splineUpdatingEachSecond.getChart());
 	}
 	
     private Component createContentWrapper(final Component content) {
@@ -234,6 +239,38 @@ public class TradingAreaView extends Panel implements View {
 
         MenuBar tools = new MenuBar();
         tools.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
+
+        MenuItem timeSteps = tools.addItem("", FontAwesome.CLOCK_O, null);
+
+        timeSteps.addItem("1 Min", new Command() {
+            @Override
+            public void menuSelected(final MenuItem selectedItem) {
+            	JavaScript.getCurrent().execute("document.getElementById('trader-chart-browser').firstElementChild.contentDocument.getElementsByClassName('stepli')[0].click();");
+            }
+        });
+        timeSteps.addSeparator();
+        timeSteps.addItem("5 Min", new Command() {
+            @Override
+            public void menuSelected(final MenuItem selectedItem) {
+            	JavaScript.getCurrent().execute("document.getElementById('trader-chart-browser').firstElementChild.contentDocument.getElementsByClassName('stepli')[1].click();");
+            }
+        });
+        
+        MenuItem charts = tools.addItem("", FontAwesome.BAR_CHART_O, null);
+        charts.addItem("Line", new Command() {
+            @Override
+            public void menuSelected(final MenuItem selectedItem) {
+            	JavaScript.getCurrent().execute("document.getElementById('trader-chart-browser').firstElementChild.contentDocument.getElementsByClassName('chart_drawtype')[0].click();");
+            }
+        });
+        charts.addSeparator();
+        charts.addItem("Candle", new Command() {
+            @Override
+            public void menuSelected(final MenuItem selectedItem) {
+            	JavaScript.getCurrent().execute("document.getElementById('trader-chart-browser').firstElementChild.contentDocument.getElementsByClassName('chart_drawtype')[1].click();");
+            }
+        });
+        
         MenuItem max = tools.addItem("", FontAwesome.EXPAND, new Command() {
 
             /**
@@ -254,21 +291,7 @@ public class TradingAreaView extends Panel implements View {
             }
         });
         max.setStyleName("icon-only");
-//        MenuItem root = tools.addItem("", FontAwesome.COG, null);
-//        root.addItem("Configure", new Command() {
-//            @Override
-//            public void menuSelected(final MenuItem selectedItem) {
-//                Notification.show("Not implemented in this demo");
-//            }
-//        });
-//        root.addSeparator();
-//        root.addItem("Close", new Command() {
-//            @Override
-//            public void menuSelected(final MenuItem selectedItem) {
-//                Notification.show("Not implemented in this demo");
-//            }
-//        });
-
+        
         toolbar.addComponents(caption, tools);
         toolbar.setExpandRatio(caption, 1);
         toolbar.setComponentAlignment(caption, Alignment.MIDDLE_LEFT);
@@ -299,16 +322,12 @@ public class TradingAreaView extends Panel implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		BeanContainer<String, Quote> quotes = new BeanContainer<String, Quote>(Quote.class);
+		quotes = new BeanContainer<String, Quote>(Quote.class);
 		    
 	    // Use the name property as the item ID of the bean
-		quotes.setBeanIdProperty(Quote.PROPERTY_CHART_ID);
-		
-		
-		//tradingService.getQuotes();
+		quotes.setBeanIdProperty(Quote.PROPERTY_SYMBOL_ID);
 		
 		quotes.addAll(tradingService.getQuotes());
-		
 		quoteSelector.setContainerDataSource(quotes);
 	}
 

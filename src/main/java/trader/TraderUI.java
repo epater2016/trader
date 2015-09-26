@@ -15,6 +15,7 @@ import org.vaadin.spring.security.util.SecurityExceptionUtils;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.VaadinRequest;
@@ -33,6 +34,7 @@ import trader.views.TradingAreaView;
 @SpringUI(path = "")
 @Theme("trader")
 @Title("Trading Website")
+@Widgetset("TraderWidgetSet")
 @SuppressWarnings("serial")
 public class TraderUI extends UI {
 	

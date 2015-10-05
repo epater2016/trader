@@ -28,36 +28,44 @@
         }
       }
 
-      .tradingarea-panel-slot {
+      .tradingarea-panel-slot-chart, .tradingarea-panel-slot-ticker {
         padding: round($view-padding / 3);
         min-height: 220px;
       }
 
   	  &[width-range~="0-700px"] {
-  	    .tradingarea-panel-slot {
+  	    .tradingarea-panel-slot-chart, .tradingarea-panel-slot-ticker {
   	      width: 100% !important;
   	    }
   	  }
 
   	  &[width-range~="701px-"] {
-  	    .tradingarea-panel-slot {
-  	      width: 50% !important;
+  	    .tradingarea-panel-slot-chart {
+  	      width: 62% !important;
+  	    }
+  	    
+  	    .tradingarea-panel-slot-ticker {
+  	      width: 38% !important;
   	    }
   	  }
 
       &[height-range~="0-440px"] {
-  	    .tradingarea-panel-slot {
+  	    .tradingarea-panel-slot-chart, .tradingarea-panel-slot-ticker {
   	      height: 100%;
   	    }
   	  }
 
   	  &[height-range~="441px-"] {
-  	    .tradingarea-panel-slot {
-  	      height: 50%;
+  	    .tradingarea-panel-slot-chart {
+  	      height: 62%;
+  	    }
+  	    
+  	    .tradingarea-panel-slot-ticker {
+  	      height: 31%;
   	    }
   	  }
 
-      .tradingarea-panel-slot.max {
+      .tradingarea-panel-slot-chart.max {
         width: 100% !important;
         height: 100%;
         padding-top: 0;

@@ -1,31 +1,35 @@
 package trader.views;
 
 import java.util.Iterator;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.i18n.I18N;
 
+import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
+import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 //import com.vaadin.ui.Window;
@@ -38,10 +42,7 @@ import trader.services.TradingService;
 
 @SpringView(name = TradingAreaView.NAME)
 public class TradingAreaView extends Panel implements View {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 7174365612115919173L;
 
 	public static final String NAME = "tradingArea";
@@ -70,6 +71,8 @@ public class TradingAreaView extends Panel implements View {
 	private LiveTicker ticker;
 
 	private BeanContainer<String, Quote> quotes;
+
+	private ChartToolbar chartToolbar;
 	
 	@PostConstruct
 	protected void initialize() {
@@ -140,41 +143,29 @@ public class TradingAreaView extends Panel implements View {
         titleLabel.addStyleName(ValoTheme.LABEL_NO_MARGIN);
         header.addComponent(titleLabel);
 
-        Component quoteSelector = buildQuoteSelector();
-        Component edit = buildEditButton();
-        HorizontalLayout tools = new HorizontalLayout(quoteSelector, edit);
-        tools.setSpacing(true);
-        tools.addStyleName("toolbar");
-        header.addComponent(tools);
+//        Component quoteSelector = buildQuoteSelector();
+//        Component edit = buildEditButton();
+//        HorizontalLayout tools = new HorizontalLayout(quoteSelector, edit);
+//        tools.setSpacing(true);
+//        tools.addStyleName("toolbar");
+//        header.addComponent(tools);
 
         return header;
 	}
-
-	private Component buildEditButton() {
-        Button result = new Button();
-        result.setId(EDIT_ID);
-        result.setIcon(FontAwesome.EDIT);
-        result.addStyleName("icon-edit");
-        result.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        result.setDescription("Edit Trading Area Style");
-
-        return result;
-    }
 	
     private Component buildQuoteSelector() {
 		quoteSelector = new ComboBox();
 		
-		quoteSelector.setInputPrompt("Select Stock/Index...");
+//		quoteSelector.setInputPrompt("Select Stock/Index...");
 		
-		quoteSelector.setItemCaptionPropertyId(Quote.PROPERTY_NAME);
-		quoteSelector.setItemCaptionMode(ItemCaptionMode.PROPERTY);
+//		quoteSelector.setItemCaptionPropertyId(Quote.PROPERTY_NAME);
+//		quoteSelector.setItemCaptionMode(ItemCaptionMode.PROPERTY);
+
 		
-//		quoteSelector.set
- 
- 
         // Set full width
-		quoteSelector.setWidth(100.0f, Unit.PERCENTAGE);
- 
+//		quoteSelector.setWidth(100.0f, Unit.PERCENTAGE);
+		quoteSelector.addStyleName("borderless");
+		
         // Set the appropriate filtering mode for this example
 		quoteSelector.setFilteringMode(FilteringMode.CONTAINS);
 		quoteSelector.setImmediate(true);
@@ -185,6 +176,8 @@ public class TradingAreaView extends Panel implements View {
 		quoteSelector.addValueChangeListener(e -> {
                 chart.setChartSymbol(quotes.getItem(e.getProperty().getValue()).getBean().getChartSrc());
                 ticker.setSymbol(quotes.getItem(e.getProperty().getValue()).getBean().getTickerSrc());
+                chartToolbar.getCharts().getChildren().get(LiveChart.ChartDrawType.LINE.ordinal()*2).setChecked(false);
+                chartToolbar.getCharts().getChildren().get(LiveChart.ChartDrawType.CANDLE.ordinal()*2).setChecked(true);
 		});
 		
 		return quoteSelector;
@@ -208,98 +201,123 @@ public class TradingAreaView extends Panel implements View {
 
 	private Component buildTicker() {
 		ticker = new LiveTicker();
-		return createContentWrapper(ticker);
+		return createContentWrapper("tradingarea-panel-slot-ticker", new Label("Payout 80%"), ticker);
 	}
 
 	private Component buildChart() {
 		chart = new LiveChart();
-		return createContentWrapper(chart);
-//		SplineUpdatingEachSecond splineUpdatingEachSecond = new SplineUpdatingEachSecond();
-//		return createContentWrapper(splineUpdatingEachSecond.getChart());
+		chartToolbar = new ChartToolbar();
+		return createContentWrapper("tradingarea-panel-slot-chart", chartToolbar, chart);
 	}
 	
-    private Component createContentWrapper(final Component content) {
-        final CssLayout slot = new CssLayout();
+    private Component createContentWrapper(String slotStyle, Component toolBar, Component content) {
+        CssLayout slot = new CssLayout();
         slot.setWidth("100%");
-        slot.addStyleName("tradingarea-panel-slot");
+        slot.addStyleName(slotStyle);
 
         CssLayout card = new CssLayout();
         card.setWidth("100%");
         card.addStyleName(ValoTheme.LAYOUT_CARD);
-
-        HorizontalLayout toolbar = new HorizontalLayout();
-        toolbar.addStyleName("tradingarea-panel-toolbar");
-        toolbar.setWidth("100%");
-
-        Label caption = new Label(content.getCaption());
-        caption.addStyleName(ValoTheme.LABEL_H4);
-        caption.addStyleName(ValoTheme.LABEL_COLORED);
-        caption.addStyleName(ValoTheme.LABEL_NO_MARGIN);
-        content.setCaption(null);
-
-        MenuBar tools = new MenuBar();
-        tools.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
-
-        MenuItem timeSteps = tools.addItem("", FontAwesome.CLOCK_O, null);
-
-        timeSteps.addItem("1 Min", new Command() {
-            @Override
-            public void menuSelected(final MenuItem selectedItem) {
-            	JavaScript.getCurrent().execute("document.getElementById('trader-chart-browser').firstElementChild.contentDocument.getElementsByClassName('stepli')[0].click();");
-            }
-        });
-        timeSteps.addSeparator();
-        timeSteps.addItem("5 Min", new Command() {
-            @Override
-            public void menuSelected(final MenuItem selectedItem) {
-            	JavaScript.getCurrent().execute("document.getElementById('trader-chart-browser').firstElementChild.contentDocument.getElementsByClassName('stepli')[1].click();");
-            }
-        });
         
-        MenuItem charts = tools.addItem("", FontAwesome.BAR_CHART_O, null);
-        charts.addItem("Line", new Command() {
-            @Override
-            public void menuSelected(final MenuItem selectedItem) {
-            	JavaScript.getCurrent().execute("document.getElementById('trader-chart-browser').firstElementChild.contentDocument.getElementsByClassName('chart_drawtype')[0].click();");
-            }
-        });
-        charts.addSeparator();
-        charts.addItem("Candle", new Command() {
-            @Override
-            public void menuSelected(final MenuItem selectedItem) {
-            	JavaScript.getCurrent().execute("document.getElementById('trader-chart-browser').firstElementChild.contentDocument.getElementsByClassName('chart_drawtype')[1].click();");
-            }
-        });
-        
-        MenuItem max = tools.addItem("", FontAwesome.EXPAND, new Command() {
+        if(toolBar instanceof SlotToolBar) {
+        	((SlotToolBar)toolBar).setSlot(slot);
+        }
 
-            /**
-			 * 
-			 */
-			private static final long serialVersionUID = -3443829142738989399L;
-
-			@Override
-            public void menuSelected(final MenuItem selectedItem) {
-                if (!slot.getStyleName().contains("max")) {
-                    selectedItem.setIcon(FontAwesome.COMPRESS);
-                    toggleMaximized(slot, true);
-                } else {
-                    slot.removeStyleName("max");
-                    selectedItem.setIcon(FontAwesome.EXPAND);
-                    toggleMaximized(slot, false);
-                }
-            }
-        });
-        max.setStyleName("icon-only");
-        
-        toolbar.addComponents(caption, tools);
-        toolbar.setExpandRatio(caption, 1);
-        toolbar.setComponentAlignment(caption, Alignment.MIDDLE_LEFT);
-
-        card.addComponents(toolbar, content);
+        card.addComponents(toolBar, content);
         slot.addComponent(card);
         return slot;
     }
+    
+    private interface SlotToolBar {
+    	void setSlot(CssLayout slot);
+    }
+
+	private class ChartToolbar extends HorizontalLayout implements SlotToolBar {
+		
+		private CssLayout slot;
+		private MenuItem timeSteps;
+		private MenuItem charts;
+		
+		public ChartToolbar() {
+	        addStyleName("tradingarea-panel-toolbar");
+	        setWidth("100%");
+	
+	
+	        MenuBar tools = new MenuBar();
+	        tools.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
+	
+	        timeSteps = tools.addItem("", FontAwesome.CLOCK_O, null);
+	        
+	        for(LiveChart.TimeStep step : LiveChart.TimeStep.values()) {
+	
+	        	MenuItem menuTimeStep = timeSteps.addItem(i18n.get("trader.tradingarea.chart.timestep."+ step.toString()),
+														  selectedItem -> {
+															  timeSteps.getChildren().forEach(i->i.setChecked(false));
+															  chart.setTimeStep(step);
+															  selectedItem.setChecked(true);
+														  });
+	        	menuTimeStep.setCheckable(true);
+	        	if(step.ordinal() + 1 < LiveChart.TimeStep.values().length) {
+	        		timeSteps.addSeparator();
+	        	}
+	        }
+	        
+	        charts = tools.addItem("", FontAwesome.BAR_CHART_O, null);
+	        
+	        for(LiveChart.ChartDrawType drawType : LiveChart.ChartDrawType.values()) {
+	        	MenuItem menuChartDrawType = charts.addItem(i18n.get("trader.tradingarea.chart.drawtype."+ drawType.toString()),
+	        				   selectedItem -> {
+	        					   charts.getChildren().forEach(i->i.setChecked(false));
+	        					   chart.setChartDrawType(drawType);
+	        					   selectedItem.setChecked(true);
+	        				   });
+	        	menuChartDrawType.setCheckable(true);
+	        	if(drawType.ordinal() + 1 < LiveChart.ChartDrawType.values().length) {
+	        		charts.addSeparator();
+	        	}
+	        }
+	        
+	        MenuItem max = tools.addItem("", FontAwesome.EXPAND, new Command() {
+	
+				private static final long serialVersionUID = -3443829142738989399L;
+	
+				@Override
+	            public void menuSelected(final MenuItem selectedItem) {
+	                if (!slot.getStyleName().contains("max")) {
+	                    selectedItem.setIcon(FontAwesome.COMPRESS);
+	                    toggleMaximized(slot, true);
+	                } else {
+	                    slot.removeStyleName("max");
+	                    selectedItem.setIcon(FontAwesome.EXPAND);
+	                    chart.markAsDirty();
+	                    toggleMaximized(slot, false);
+	                }
+	            }
+	        });
+	        max.setStyleName("icon-only");
+	        
+	        Component quoteSelector = buildQuoteSelector();
+	        addComponents(quoteSelector, tools);
+	        setComponentAlignment(quoteSelector, Alignment.MIDDLE_LEFT);
+	        setComponentAlignment(tools, Alignment.MIDDLE_RIGHT);
+		}
+		
+		@Override
+		public void setSlot(CssLayout slot) {
+			this.slot = slot;
+			
+		}
+
+		public MenuItem getTimeSteps() {
+			return timeSteps;
+		}
+
+		public MenuItem getCharts() {
+			return charts;
+		}
+		
+		
+	}
 
     private void toggleMaximized(final Component panel, final boolean maximized) {
         for (Iterator<Component> it = root.iterator(); it.hasNext();) {
@@ -327,8 +345,22 @@ public class TradingAreaView extends Panel implements View {
 	    // Use the name property as the item ID of the bean
 		quotes.setBeanIdProperty(Quote.PROPERTY_SYMBOL_ID);
 		
-		quotes.addAll(tradingService.getQuotes());
-		quoteSelector.setContainerDataSource(quotes);
+		List<Quote> quotesList = tradingService.getQuotes();
+		quotes.addAll(quotesList);
+//		quoteSelector.setContainerDataSource(quotes);
+//		quoteSelector.setInputPrompt(quotesList.get(0).getName());
+		
+		for (Quote quote : quotesList) {
+			quoteSelector.addItem(quote.getSymbol());
+			quoteSelector.setItemCaption(quote.getSymbol(), quote.getName());
+		}
+		
+		chartToolbar.getTimeSteps().getChildren().get(chart.getTimeStep().ordinal()*2).setChecked(true);
+		chart.setChartDrawType(LiveChart.ChartDrawType.LINE);
+		chartToolbar.getCharts().getChildren().get(LiveChart.ChartDrawType.LINE.ordinal()*2).setChecked(true);
+		quoteSelector.select(quotesList.get(0).getSymbol());
+		
+		
 	}
 
 }

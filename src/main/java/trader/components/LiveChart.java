@@ -3,34 +3,55 @@ package trader.components;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import javax.servlet.http.Cookie;
+
 import com.vaadin.server.Responsive;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.server.VaadinService;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.BrowserFrame;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.JavaScript;
 
 public class LiveChart extends AbsoluteLayout {
 	
+	private static final String LIVE_CHART_ID = "trader-chart-browser";
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3154463732483823099L;
 	private String symbol = "1:EURUSD";
-	private String timeZone = "Etc/UTC";
-	private String locale = "en";
 	
 	private BrowserFrame browser = new BrowserFrame("Real Time Chart");
+	private TimeStep timeStep = null;
+	private ChartDrawType chartDrawType = ChartDrawType.CANDLE;
+	
+	public enum TimeStep {
+		M1,
+		M5,
+		M15,
+		M30,
+		H1,
+		H4,
+		D1,
+		W1
+	}
+	
+	public enum ChartDrawType {
+		LINE,
+		CANDLE
+	}
 	
 	public LiveChart() {
 		updateChart();
 		setupLayout();
-		browser.setId("trader-chart-browser");
+		browser.setId(LIVE_CHART_ID);
+		
 	}
 
-	public LiveChart(String symbol, String timeZone, String locale) {
+	public LiveChart(String symbol) {
 		super();
 		this.symbol = symbol;
-		this.timeZone = timeZone;
-		this.locale = locale;
 		
 		updateChart();
 		setupLayout();
@@ -45,9 +66,9 @@ public class LiveChart extends AbsoluteLayout {
 	
 	
 	private void updateChart() {
-//		browser.setSource(new ThemeResource("HTML/graph.html?symbol="+symbol+"&zone="+timeZone+"&locale="+locale));
 		try {
 			browser.setSource(new ThemeResource("HTML/live-chart.html?" + URLEncoder.encode(symbol, "UTF-8")));
+			chartDrawType = ChartDrawType.CANDLE;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,30 +88,80 @@ public class LiveChart extends AbsoluteLayout {
 		}
 	}
 
+	public TimeStep getTimeStep() {
+		if(null == timeStep) {
+			Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
 
-	public String getChartTimeZone() {
-		return timeZone;
+		    // Iterate to find cookie by its name
+		    for (Cookie cookie : cookies) {
+		        if ("ifcchartsstep".equals(cookie.getName())) {
+		        	switch(Integer.parseInt(cookie.getValue())) {
+		        	case 1:
+		        		timeStep = TimeStep.M1;
+		        		break;
+		        	case 5:
+		        		timeStep = TimeStep.M5;
+		        		break;
+		        	case 15:
+		        		timeStep = TimeStep.M15;
+		        		break;
+		        	case 30:
+		        		timeStep = TimeStep.M30;
+		        		break;
+		        	case 60:
+		        		timeStep = TimeStep.H1;
+		        		break;
+		        	default:
+		        	case 240:
+		        		timeStep = TimeStep.H4;
+		        		break;
+		        	case 1440:
+		        		timeStep = TimeStep.D1;
+		        		break;
+		        	case 10080:
+		        		timeStep = TimeStep.W1;
+		        		break;
+		        	}
+		        }
+		    }
+		    if(null == timeStep) { // no cookie
+		    	timeStep = TimeStep.H4; // default
+		    }
+		}
+		
+		return timeStep;
 	}
 
-
-	public void setChartTimeZone(String timeZone) {
-		if(!this.timeZone.equals(timeZone)) {
-			this.timeZone = timeZone;
-			updateChart();
+	public void setTimeStep(TimeStep timeStep) {
+		if (this.timeStep == null || this.timeStep != timeStep) {
+			_jsSetTimeStep(timeStep);
+			this.timeStep = timeStep;
 		}
 	}
 
-
-	public String getChartLocale() {
-		return locale;
+	private void _jsSetTimeStep(TimeStep timeStep) {
+		JavaScript.getCurrent()
+				.execute("document.getElementById('" + LIVE_CHART_ID
+						+ "').firstElementChild.contentDocument.getElementsByClassName('stepli')["
+						+ timeStep.ordinal() + "].click();");
 	}
 
+	public ChartDrawType getChartDrawType() {
+		return chartDrawType;
+	}
 
-	public void setChartLocale(String locale) {
-		if(!this.locale.equals(locale)) {
-			this.locale = locale;
-			updateChart();
+	public void setChartDrawType(ChartDrawType chartDrawType) {
+		if (this.chartDrawType == null || this.chartDrawType != chartDrawType) {
+			_jsSetChartDrawType(chartDrawType);
+			this.chartDrawType = chartDrawType;
 		}
+	}
+
+	private void _jsSetChartDrawType(ChartDrawType chartDrawType) {
+		JavaScript.getCurrent()
+				.execute("document.getElementById('" + LIVE_CHART_ID
+						+ "').firstElementChild.contentDocument.getElementsByClassName('chart_drawtype')["
+						+ chartDrawType.ordinal() + "].click();");
 	}
 	
 }
